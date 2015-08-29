@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.link {
+  stroke: #000;
+}
+
+.node {
+  stroke: #fff;
+}
+
+.node text {
+  font: 10 px sans-serif;
+}
+
+</style>
+<body> 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+
+var width = 2000,
+    height = 900;
+
+var monthLegend = [["January", "#F44336"], ["February", "#9C27B0"], ["March", "#3F51B5"], ["April", "#2196F3"], ["May", "#00BCD4"], 
+["June", "#009688"], ["July", "#4CAF50"],["August", "#FFEB3B"], ["September", "CDDC39"], ["October", "#FF9800"], ["November", "#795548"], ["December", "#9E9E9E"]]
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+/*
+var legend = d3.selectAll("body").append("svg")
+  .data(monthLegend)
+  .enter()
+  .append("div")
+  .attr("class", "rect")
+  .style("fill", function(d){
+    for (i = 0; i < monthLegend.length; i++)
+      return monthLegend[i][1]
+  });
+*/
+
+var force = d3.layout.force()
+    .size([width, height])
+    .linkDistance(40)
+    .charge(-100);
+
+d3.csv("bands.csv", function(error, links) {
+  if (error) throw error;
+
+  var nodesByName = {};
+
+  // Create nodes for each unique source and target.
+  links.forEach(function(link) {
+    link.source = nodeByName(link.Artist);
+    link.target = nodeByName(link.Month);
+    //console.log("you saw " + link.Artist + " in " + link.Month)
+  });
+
+  // Extract the array of nodes from the map by name.
+  var nodes = d3.values(nodesByName);
+
+  // Create the link lines.
+  var link = svg.selectAll(".link")
+      .data(links)
+    .enter().append("line")
+      .attr("class", "link")
+
+  // Create the node circles.
+  var node = svg.selectAll(".node")
+      .data(nodes)
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("r", function(d){
+        if(d.name == "January" || d.name ==  "February" || d.name ==  "March" || d.name ==  "April"
+          || d.name == "May" || d.name == "June" || d.name == "July" || d.name == "August" || d.name == "September"
+          || d.name == "October" || d.name == "November" || d.name == "December"){
+          return 12
+        }
+        else{ 
+          return 5}
+      })
+      .on("click", function(d){
+        console.log(d)
+        console.log(d.name)
+        console.log(d.x)
+        console.log(typeof(d.x))
+
+
+      })
+
+      .style("fill", function(d){
+        //console.log(d)
+        if (d.name == "January"){
+          return "#F44336" // Red
+        }
+        else if (d.name == "February"){
+          return "#9C27B0" // Purple
+        }
+        else if (d.name == "March"){
+          return "#3F51B5" // Indigo
+        }
+        else if (d.name == "April"){
+          return "#2196F3" // Blue
+        }
+        else if (d.name == "May"){
+          return "#00BCD4" // Cyan
+        }
+        else if (d.name == "June"){
+          return "#009688" // Teal
+        }
+        else if (d.name == "July"){
+          return "#4CAF50" // Green
+        }
+        else if (d.name == "August"){
+          return "#FFEB3B" // Yellow
+        }
+        else if (d.name == "September"){
+          return "#CDDC39" // Lime
+        }
+        else if (d.name == "October"){
+          return "#FF9800" // Orange
+        }
+        else if (d.name == "November"){
+          return "#795548" // Brown
+        }
+        else if (d.name == "December"){
+          return "#9E9E9E" // Grey
+        }           
+      })
+    
+      .call(force.drag);
+  
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d){return d.name});
+  // Start the force layout.
+  force
+      .nodes(nodes)
+      .links(links)
+      .on("tick", tick)
+      .start();
+
+
+  function tick() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  }
+
+  function nodeByName(name) {
+    return nodesByName[name] || (nodesByName[name] = {name: name});
+  }
+});
+
+</script>

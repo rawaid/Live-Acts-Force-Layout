@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Last.fm test</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <script type="text/javascript" src="lastfm.api.js"></script>
+  <script type="text/javascript" src="lastfm.api.cache.js"></script>
+  <script type="text/javascript" src="lastfm.api.md5.js"></script>
+
+
+  <script>
+  /* Create a cache object */
+	var cache = new LastFMCache();
+
+	/* Create a LastFM object */
+	var lastfm = new LastFM({
+	  apiKey    : 'f21088bf9097b49ad4e7f487abab981e',
+	  apiSecret : '7ccaec2093e33cded282ec7bc81c6fca',
+	  cache     : cache
+	});
+	
+	/* Load some artist info. */
+	
+//	lastfm.artist.getInfo({artist: 'The xx'}, {success: function(data){
+	  /* Use data. */
+//	  console.log(data);
+	  //document.getElementById("myText").innerHTML=lastfm.artist.bio.content;
+//	  console.log(data.artist.bio.content);
+//	  document.getElementById("myText").innerHTML = data.artist.tags.tag[0].name;
+//	}, error: function(code, message){
+
+	  /* Show error message. */
+//	}});
+	
+	lastfm.artist.getInfo({artist: 'LVL UP'}, {success: function(data){
+		console.log(data.artist.image[1]['#text']);
+		/*
+		var img = document.createElement("img");
+		img.src = data.artist.image[1]['#text'];
+		var src = document.getElementById("body");
+		src.appendChild(img);		
+		*/
+			
+	}});
+
+
+  </script>
+
+
+
+</head>
+<body>
+
+
+</body>
+</html>
