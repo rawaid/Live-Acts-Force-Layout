@@ -1,1 +1,1 @@
-In response to a Stack Overflow question, [How to convert to D3's JSON format?](http://stackoverflow.com/questions/11088303/how-to-convert-to-d3s-json-format/11089330#11089330).# Live-Acts-Force-Layout
+Base template obtained from M. Bostock's response to a Stack Overflow question, [How to convert to D3's JSON format?](http://stackoverflow.com/questions/11088303/how-to-convert-to-d3s-json-format/11089330#11089330).# Live-Acts-Force-Layout
