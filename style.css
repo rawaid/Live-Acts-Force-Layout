@@ -1,0 +1,35 @@
+img{
+  z-index:3;
+  border: 1px solid black;
+}
+.d3-tip {
+    background: white;
+    line-height:1;
+    color: black;
+    z-index:4;
+    padding:2px;
+    border: 0px;    
+    border-radius: 8px; 
+}
+.link {
+  stroke: #000;
+}
+
+.node {
+  stroke: #000;
+  cursor: pointer;
+}
+
+.node text {
+  font: 10 px sans-serif;
+  cursor: pointer;
+}
+.container1{
+  float:left;
+  position: relative;
+  z-index:2;
+}
+.container2{
+  position:relative;
+}
+

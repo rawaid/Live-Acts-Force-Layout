@@ -1,236 +1,52 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
+<head>
+  <title> Live Acts Visualization </title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script type="text/javascript" src="lastfm.api.js"></script>
+  <script type="text/javascript" src="lastfm.api.cache.js"></script>
+  <script type="text/javascript" src="lastfm.api.md5.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="graph1.js"></script>
+  <script src="graph2.js"></script>
+  <script src="graph3.js"></script>
+  <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
 
-
-.link {
-  stroke: #000;
-}
-
-.node {
-  stroke: #fff;
-}
-
-.node text {
-  font: 10 px sans-serif;
-}
-.container1{
-  position: relative;
-  float:left;
-}
-.container2{
-  float:right;
-  position:relative;
-}
-
-
-</style>
+</head>
 <body> 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-<script type="text/javascript" src="lastfm.api.js"></script>
-<script type="text/javascript" src="lastfm.api.cache.js"></script>
-<script type="text/javascript" src="lastfm.api.md5.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<div>
+  <button onclick="draw();">Artists By Month</button>
+  <button onclick="draw2();">Artists By Year</button>
+  <button onclick="draw3();">Artists By City</button>
+  <button onclick="stop()"> Freeze Graph </button>
+</div>
 
-<div class ="container"><div class="container1" id = "graph"></div><div class ="container2" id = "artistInfo"></div></div>
-
-<script>
-
-var width = 1000,
-    height = 1000;
-
-var width2 = 500, height2 = 500;
-
-var monthLegend = [["January", "#F44336"], ["February", "#9C27B0"], ["March", "#3F51B5"], ["April", "#2196F3"], ["May", "#00BCD4"], 
-["June", "#009688"], ["July", "#4CAF50"],["August", "#FFEB3B"], ["September", "CDDC39"], ["October", "#FF9800"], ["November", "#795548"], ["December", "#9E9E9E"]]
+<div class ="container">
+  <div class="container1" id = "graph"></div>
+  <div class ="container2" id = "artistInfo"></div>
+</div>
 
 
-var svg = d3.select("#graph").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-/*
-svg.append("rect")
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .attr("fill", "#607D8B");
-*/
-var svg2 = d3.select("#artistInfo").append("svg")
-    .attr("width", width2)
-    .attr("height", height2);
-/*
-svg2.append("rect")
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .attr("fill", "#607D8A");
-
-*/
-
-var force = d3.layout.force()
-    .size([width, height])
-    .linkDistance(40)
-    .charge(-100);
-d3.csv("bands.csv", function(error, links) {
-  if (error) throw error;
-
-  var nodesByName = {};
-
-  // Create nodes for each unique source and target.
-  links.forEach(function(link) {
-    link.source = nodeByName(link.Artist);
-    link.target = nodeByName(link.Month);
-    //console.log("you saw " + link.Artist + " in " + link.Month)
-  });
-
-  // Extract the array of nodes from the map by name.
-  var nodes = d3.values(nodesByName);
-
-  // Create the link lines.
-  var link = svg.selectAll(".link")
-      .data(links)
-    .enter().append("line")
-      .attr("class", "link")
-
-  // Create the node circles.
-  var node = svg.selectAll(".node")
-      .data(nodes)
-    .enter().append("g")
-      .attr("class", "node")   
-      .call(force.drag);
-
-  node.append("circle")
-      .attr("class", "node")
-      .attr("r", function(d){
-        if(d.name == "January" || d.name ==  "February" || d.name ==  "March" || d.name ==  "April"
-          || d.name == "May" || d.name == "June" || d.name == "July" || d.name == "August" || d.name == "September"
-          || d.name == "October" || d.name == "November" || d.name == "December"){
-          return 12
-        }
-        else{ 
-          return 5}
-      })
-      .style("fill", function(d){
-        //console.log(d)
-        if (d.name == "January"){
-          return "#F44336" // Red
-        }
-        else if (d.name == "February"){
-          return "#9C27B0" // Purple
-        }
-        else if (d.name == "March"){
-          return "#3F51B5" // Indigo
-        }
-        else if (d.name == "April"){
-          return "#2196F3" // Blue
-        }
-        else if (d.name == "May"){
-          return "#00BCD4" // Cyan
-        }
-        else if (d.name == "June"){
-          return "#009688" // Teal
-        }
-        else if (d.name == "July"){
-          return "#4CAF50" // Green
-        }
-        else if (d.name == "August"){
-          return "#FFEB3B" // Yellow
-        }
-        else if (d.name == "September"){
-          return "#CDDC39" // Lime
-        }
-        else if (d.name == "October"){
-          return "#FF9800" // Orange
-        }
-        else if (d.name == "November"){
-          return "#795548" // Brown
-        }
-        else if (d.name == "December"){
-          return "#9E9E9E" // Grey
-        }           
-      })
-      .on("click", function(d){
-        console.log(d)
+<div class ="container">
+  <div class="container1" id = "graph2"></div>
+  <div class ="container2" id = "artistInfo2"></div>
+</div>
 
 
-      });
-
-  node.append("text")
-      .attr("dx", 0)
-      .attr("dy", 0)
-      .attr("fill", "black")
-      .style("opacity", 0.0)
-      .on('mouseover', function(d){
-        var nodeSelection = d3.select(this).style({opacity:'0.8' });
-        nodeSelection.select("text").style({opacity: '1.0'});
-      })
-      .on('mouseout', function(d){
-        var nodeSelection = d3.select(this).style({opacity:'0.0' });
-        nodeSelection.select("text").style({opacity: '0.0'});
-      })      
-      .text(function(d){return d.name})
-      .on("click", function(d){
-
-        if (d.weight == 1){
-          document.getElementById('artistInfo').innerHTML = "I saw " + d.name + " once" ;
-          document.getElementById('artistInfo').innerHTML += "</br>" ;
-        }
-        else
-          document.getElementById('artistInfo').innerHTML = "I saw " + d.name + " " + d.weight + " times";
-          document.getElementById('artistInfo').innerHTML += "</br>" ;
-
-          var cache = new LastFMCache();
-
-          /* Create a LastFM object */
-          var lastfm = new LastFM({
-            apiKey    : 'f21088bf9097b49ad4e7f487abab981e',
-            apiSecret : '7ccaec2093e33cded282ec7bc81c6fca',
-            cache     : cache
-          });
-
-            lastfm.artist.getInfo({artist: d.name}, {success: function(data){
-              //console.log(data.artist.image[5]['#text']);
-              /*
-              var img = document.createElement("img");
-              img.src = data.artist.image[1]['#text'];
-              var src = document.getElementById("body");
-              src.appendChild(img);   
-              */
-              console.log(data)
-              console.log(data.artist.name);
-              var img = new Image();
-              var div = document.getElementById('artistInfo');
-
-              img.onload = function(){
-                div.appendChild(img);
-              };
-
-              img.src = data.artist.image[2]['#text'];
-            }}); 
-          });;
-    // Start the force layout.
-  force
-      .nodes(nodes)
-      .links(links)
-      .on("tick", tick)
-      .start();
+<div class ="container">
+  <div class="container1" id = "graph3"></div>
+  <div class ="container2" id = "artistInfo3"></div>
+      <svg id="mySvg" width="80" height="80">
+        <defs id="mdef">
+          <pattern id="image" x="0" y="0" height="40" width="40">
+            <image x="0" y="0" width="40" height="40" xlink:href="http://www.e-pint.com/epint.jpg"></image>
+          </pattern>
+    </defs>
 
 
-  function tick() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
 
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-  }
-
-  function nodeByName(name) {
-    return nodesByName[name] || (nodesByName[name] = {name: name});
-  }
-});
-
-</script>
+</body>
 
 
